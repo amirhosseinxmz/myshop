@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - My Shop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container">
+            <h1>Products Admin Panel</h1>
+            <nav>
+                <a href="/" class="shop-link">View Shop</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="add-product-section">
+            <h2>Add New Product</h2>
+            <form id="form" class="product-form">
+                <div class="form-group">
+                    <label for="title">Product Title:</label>
+                    <input type="text" id="title" placeholder="Product title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price (Toman):</label>
+                    <input type="number" id="price" placeholder="Price" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="image_url">Image URL:</label>
+                    <input type="url" id="image_url" placeholder="https://example.com/image.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="link_to_buy">Buy Link:</label>
+                    <input type="url" id="link_to_buy" placeholder="https://example.com/buy">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" placeholder="Product description" rows="4"></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">Add Product</button>
+            </form>
+        </section>
+
+        <section class="products-list-section">
+            <h2>Existing Products</h2>
+            <div id="productsList" class="products-grid">
+                <!-- Products list will be displayed here -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000/api';
+
+        document.getElementById("form").addEventListener("submit", async e => {
+            e.preventDefault();
+
+            const data = {
+                title: document.getElementById('title').value,
+                price: document.getElementById('price').value,
+                image_url: document.getElementById('image_url').value,
+                link_to_buy: document.getElementById('link_to_buy').value,
+                description: document.getElementById('description').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/products`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("Product added successfully!");
+                    document.getElementById("form").reset();
+                    loadProductsList();
+                } else {
+                    alert("Error adding product: " + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Server connection error");
+            }
+        });
+
+        async function loadProductsList() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/products`);
+                const products = await response.json();
+
+                const productsList = document.getElementById('productsList');
+                
+                if (products.length === 0) {
+                    productsList.innerHTML = '<p class="no-products">No products added yet.</p>';
+                    return;
+                }
+
+                productsList.innerHTML = products.map(product => `
+                    <div class="product-card admin-card">
+                        ${product.image_url ? `
+                            <div class="product-image">
+                                <img src="${product.image_url}" alt="${product.title}" onerror="this.style.display='none'">
+                            </div>
+                        ` : `
+                            <div class="product-image no-image">
+                                <span>No Image</span>
+                            </div>
+                        `}
+                        <div class="product-info">
+                            <h3 class="product-title">${product.title}</h3>
+                            <p class="product-description">${product.description || 'No description'}</p>
+                            <div class="product-footer">
+                                <span class="product-price">${product.price ? product.price.toLocaleString() + ' Toman' : 'Price not set'}</span>
+                                ${product.link_to_buy ? `
+                                    <a href="${product.link_to_buy}" target="_blank" class="buy-button">
+                                        Buy Link
+                                    </a>
+                                ` : ''}
+                            </div>
+                            <button onclick="deleteProduct(${product.id})" class="btn-delete">
+                                Delete Product
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('productsList').innerHTML = 
+                    '<p class="error">Error loading products</p>';
+            }
+        }
+
+        async function deleteProduct(productId) {
+            if (!confirm('Are you sure you want to delete this product?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
+                    method: "DELETE"
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("Product deleted successfully!");
+                    loadProductsList();
+                } else {
+                    alert("Error deleting product: " + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Server connection error");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProductsList);
+    </script>
+</body>
+</html>

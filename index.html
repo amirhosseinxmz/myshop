@@ -1,81 +1,150 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فروشگاه اینترنتی - فروشگاه من</title>
+    <title>Luxury Collection - Premium Products</title>
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --dark-bg: #1a1a1a;
+            --gold: #d4af37;
+            --light-gold: #f4e4a6;
+            --text-light: #e0e0e0;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
         }
         
-        .navbar {
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .luxury-navbar {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gold);
         }
         
-        .slider-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 0;
-            margin-bottom: 30px;
+        .nav-link {
+            color: var(--text-light) !important;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--gold) !important;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            padding: 100px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--gold);
+        }
+        
+        .category-card {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+        }
+        
+        .category-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
         }
         
         .product-card {
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
+            background: #2a2a2a;
+            border: 1px solid #444;
             border-radius: 15px;
             overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
         }
         
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: var(--gold);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.15);
         }
         
         .product-image {
-            height: 200px;
+            height: 250px;
             object-fit: cover;
+            width: 100%;
         }
         
-        .price {
-            color: #e74c3c;
-            font-weight: bold;
-            font-size: 1.2rem;
+        .no-image {
+            background: linear-gradient(135deg, #333 0%, #555 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
         }
         
-        .discount-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #e74c3c;
-            color: white;
-            padding: 5px 10px;
+        .btn-luxury {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 12px 30px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-luxury:hover {
+            background: var(--gold);
+            color: var(--dark-bg);
+        }
+        
+        .btn-view {
+            background: transparent;
+            border: 1px solid var(--text-light);
+            color: var(--text-light);
+            padding: 8px 20px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
         
-        .category-box {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s;
-            border: 2px solid transparent;
+        .btn-view:hover {
+            background: var(--text-light);
+            color: var(--dark-bg);
         }
         
-        .category-box:hover {
-            border-color: #3498db;
-            transform: translateY(-3px);
+        .section-title {
+            color: var(--gold);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .featured-slider {
+            background: #2a2a2a;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 50px 0;
+            border: 1px solid #444;
         }
         
         .slider-item {
             display: none;
-            animation: fadeIn 1s;
+            animation: fadeIn 1s ease;
         }
         
         .slider-item.active {
@@ -83,109 +152,101 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .footer {
-            background: #2c3e50;
-            color: white;
-            margin-top: 50px;
+            background: #1a1a1a;
+            border-top: 1px solid var(--gold);
+            padding: 50px 0 20px;
+        }
+        
+        .gold-text {
+            color: var(--gold);
         }
     </style>
 </head>
 <body>
-    <!-- نوار بالایی -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark luxury-navbar fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
-                <i class="fas fa-store me-2"></i>فروشگاه اینترنتی
+            <a class="navbar-brand gold-text fw-light fs-3" href="/">
+                <i class="fas fa-gem me-2"></i>LUXURY COLLECTION
             </a>
             
             <div class="navbar-nav ms-auto">
-                <a href="/admin" class="btn btn-outline-light">
-                    <i class="fas fa-cog me-1"></i> پنل مدیریت
+                <a href="/admin" class="nav-link">
+                    <i class="fas fa-cog me-1"></i> Admin Panel
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- اسلایدر محصولات ویژه -->
-    <section class="slider-section">
+    <!-- Hero Section -->
+    <section class="hero-section">
         <div class="container">
-            <h2 class="text-center mb-4">محصولات ویژه</h2>
-            <div id="featuredSlider" class="position-relative">
-                <!-- اسلایدر اینجا پر میشود -->
+            <h1 class="display-4 gold-text fw-light mb-4">ELEGANCE REDEFINED</h1>
+            <p class="lead mb-4">Discover our exclusive collection of premium products</p>
+            <a href="#products" class="btn-luxury">Explore Collection</a>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-5" id="categories">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">CATEGORIES</h2>
+            <div class="row g-4" id="categoriesContainer">
+                <!-- Categories will be loaded here -->
             </div>
         </div>
     </section>
 
-    <!-- دسته‌بندی‌ها -->
-    <section class="categories-section py-5">
+    <!-- Featured Products Slider -->
+    <section class="featured-slider">
         <div class="container">
-            <h3 class="text-center mb-4">دسته‌بندی محصولات</h3>
-            <div class="row g-3">
-                <div class="col-md-3 col-6">
-                    <div class="category-box">
-                        <i class="fas fa-mobile-alt fa-2x text-primary mb-2"></i>
-                        <h6>موبایل</h6>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="category-box">
-                        <i class="fas fa-laptop fa-2x text-success mb-2"></i>
-                        <h6>لپ‌تاپ</h6>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="category-box">
-                        <i class="fas fa-tshirt fa-2x text-warning mb-2"></i>
-                        <h6>پوشاک</h6>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="category-box">
-                        <i class="fas fa-home fa-2x text-info mb-2"></i>
-                        <h6>خانه و آشپزخانه</h6>
-                    </div>
-                </div>
+            <h2 class="section-title text-center mb-4">FEATURED SELECTION</h2>
+            <div id="featuredSlider">
+                <!-- Featured products slider will be here -->
             </div>
         </div>
     </section>
 
-    <!-- تمام محصولات -->
-    <section class="products-section py-5">
+    <!-- All Products -->
+    <section class="py-5" id="products">
         <div class="container">
-            <h3 class="text-center mb-5">همه محصولات</h3>
-            <div id="products" class="row g-4">
-                <!-- محصولات اینجا نمایش داده می‌شوند -->
+            <h2 class="section-title text-center mb-5">OUR COLLECTION</h2>
+            <div class="row g-4" id="productsContainer">
+                <!-- Products will be loaded here -->
             </div>
         </div>
     </section>
 
-    <!-- فوتر -->
-    <footer class="footer py-4">
+    <!-- Footer -->
+    <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <h5>فروشگاه اینترنتی</h5>
-                    <p>بهترین محصولات با بهترین قیمت‌ها</p>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="gold-text mb-3">LUXURY COLLECTION</h5>
+                    <p>Curated excellence for the discerning individual.</p>
                 </div>
-                <div class="col-md-4">
-                    <h5>خدمات مشتریان</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-light">پرسش‌های متداول</a></li>
-                        <li><a href="#" class="text-light">رویه بازگرداندن کالا</a></li>
-                    </ul>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="gold-text mb-3">CONTACT</h5>
+                    <p><i class="fas fa-envelope me-2"></i> contact@luxurycollection.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
                 </div>
-                <div class="col-md-4">
-                    <h5>تماس با ما</h5>
-                    <p><i class="fas fa-phone me-2"></i> ۰۲۱-۱۲۳۴۵۶۷۸</p>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="gold-text mb-3">FOLLOW US</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+                    </div>
                 </div>
             </div>
-            <hr class="my-4">
+            <hr class="my-4" style="border-color: #444;">
             <div class="text-center">
-                <p>&copy; ۲۰۲۴ فروشگاه اینترنتی. تمام حقوق محفوظ است.</p>
+                <p class="mb-0">&copy; 2024 Luxury Collection. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -197,43 +258,68 @@
         const API_BASE_URL = '/api';
         let currentSlide = 0;
         let featuredProducts = [];
+        let categories = [];
 
-        // بارگذاری محصولات
-        async function loadProducts() {
+        // Load all data
+        async function loadData() {
             try {
-                const response = await fetch(`${API_BASE_URL}/products`);
-                const products = await response.json();
-
-                // ذخیره محصولات برای اسلایدر
-                featuredProducts = products.slice(0, 5); // 5 محصول اول برای اسلایدر
+                const [productsResponse] = await Promise.all([
+                    fetch(`${API_BASE_URL}/products`)
+                ]);
                 
-                // نمایش اسلایدر
+                const products = await productsResponse.json();
+                
+                // Get categories from products
+                categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+                
+                // Set default categories if none
+                if (categories.length === 0) {
+                    categories = ['Electronics', 'Fashion', 'Home', 'Accessories'];
+                }
+                
+                featuredProducts = products.slice(0, 3); // First 3 products for slider
+                
+                renderCategories();
                 renderSlider();
-                
-                // نمایش تمام محصولات
-                renderAllProducts(products);
+                renderProducts(products);
                 
             } catch (error) {
-                console.error('Error loading products:', error);
-                document.getElementById('products').innerHTML = `
-                    <div class="col-12 text-center">
-                        <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            خطا در بارگذاری محصولات
-                        </div>
-                    </div>
-                `;
+                console.error('Error loading data:', error);
+                showError();
             }
         }
 
-        // نمایش اسلایدر
+        // Render categories
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            const categoryIcons = {
+                'Electronics': 'fas fa-laptop',
+                'Fashion': 'fas fa-tshirt',
+                'Home': 'fas fa-home',
+                'Accessories': 'fas fa-gem',
+                'default': 'fas fa-star'
+            };
+
+            container.innerHTML = categories.map(category => `
+                <div class="col-md-3 col-6">
+                    <div class="category-card">
+                        <i class="${categoryIcons[category] || categoryIcons.default} category-icon"></i>
+                        <h5 class="gold-text">${category}</h5>
+                        <p class="small text-light">Premium ${category} Collection</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render featured products slider
         function renderSlider() {
             const slider = document.getElementById('featuredSlider');
             
             if (featuredProducts.length === 0) {
                 slider.innerHTML = `
-                    <div class="text-center">
-                        <p>هنوز محصولی اضافه نشده است</p>
+                    <div class="text-center py-5">
+                        <i class="fas fa-gem fa-3x gold-text mb-3"></i>
+                        <p class="text-light">No featured products yet</p>
                     </div>
                 `;
                 return;
@@ -242,83 +328,89 @@
             slider.innerHTML = featuredProducts.map((product, index) => `
                 <div class="slider-item ${index === 0 ? 'active' : ''}">
                     <div class="row align-items-center">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             ${product.image_url ? `
-                                <img src="${product.image_url}" class="img-fluid rounded" alt="${product.title}" style="max-height: 300px;">
+                                <img src="${product.image_url}" class="img-fluid rounded" alt="${product.title}" style="max-height: 400px; width: 100%; object-fit: cover;">
                             ` : `
-                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
-                                    <i class="fas fa-image fa-5x text-muted"></i>
+                                <div class="no-image rounded" style="height: 400px;">
+                                    <i class="fas fa-image fa-5x"></i>
                                 </div>
                             `}
                         </div>
-                        <div class="col-md-6">
-                            <h3>${product.title}</h3>
-                            <p class="lead">${product.description || 'توضیحات موجود نیست'}</p>
-                            <div class="price h4">${product.price ? product.price.toLocaleString() + ' تومان' : 'قیمت نامشخص'}</div>
-                            ${product.link_to_buy ? `
-                                <a href="${product.link_to_buy}" target="_blank" class="btn btn-success btn-lg mt-3">
-                                    <i class="fas fa-shopping-cart me-2"></i>خرید محصول
-                                </a>
-                            ` : ''}
+                        <div class="col-lg-6">
+                            <h3 class="gold-text mb-3">${product.title}</h3>
+                            <p class="lead mb-4">${product.description || 'Exclusive product from our premium collection.'}</p>
+                            <div class="d-flex gap-3">
+                                ${product.link_to_buy ? `
+                                    <a href="${product.link_to_buy}" target="_blank" class="btn-luxury">
+                                        <i class="fas fa-shopping-bag me-2"></i>Purchase
+                                    </a>
+                                ` : ''}
+                                <button class="btn-view">
+                                    <i class="fas fa-eye me-2"></i>View Details
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             `).join('');
 
-            // شروع اسلایدر
             startSlider();
         }
 
-        // اسلایدر خودکار
+        // Auto slider
         function startSlider() {
-            setInterval(() => {
-                const slides = document.querySelectorAll('.slider-item');
-                slides[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % slides.length;
-                slides[currentSlide].classList.add('active');
-            }, 5000); // تغییر هر 5 ثانیه
+            if (featuredProducts.length > 1) {
+                setInterval(() => {
+                    const slides = document.querySelectorAll('.slider-item');
+                    slides[currentSlide].classList.remove('active');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.add('active');
+                }, 5000);
+            }
         }
 
-        // نمایش تمام محصولات
-        function renderAllProducts(products) {
-            const container = document.getElementById('products');
+        // Render all products
+        function renderProducts(products) {
+            const container = document.getElementById('productsContainer');
             
             if (products.length === 0) {
                 container.innerHTML = `
-                    <div class="col-12 text-center">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>
-                            هنوز محصولی اضافه نشده است
-                        </div>
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-box-open fa-3x gold-text mb-3"></i>
+                        <h4 class="gold-text">Collection Coming Soon</h4>
+                        <p class="text-light">Our premium products will be available shortly</p>
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = products.map(product => `
-                <div class="col-md-6 col-lg-4 col-xl-3">
-                    <div class="card product-card h-100">
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
                         <div class="position-relative">
                             ${product.image_url ? `
-                                <img src="${product.image_url}" class="card-img-top product-image" alt="${product.title}">
+                                <img src="${product.image_url}" class="product-image" alt="${product.title}">
                             ` : `
-                                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white" style="height: 200px;">
+                                <div class="product-image no-image">
                                     <i class="fas fa-image fa-3x"></i>
                                 </div>
                             `}
-                            <div class="discount-badge">ویژه</div>
                         </div>
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${product.title}</h5>
-                            <p class="card-text text-muted flex-grow-1">${product.description || 'بدون توضیحات'}</p>
-                            <div class="mt-auto">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="price">${product.price ? product.price.toLocaleString() + ' تومان' : 'رایگان'}</span>
+                        <div class="p-4">
+                            <h5 class="gold-text mb-2">${product.title}</h5>
+                            <p class="text-light mb-3 small">${product.description || 'Premium quality product from our exclusive collection.'}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-dark border border-gold">${product.category || 'Luxury'}</span>
+                                <div class="d-flex gap-2">
                                     ${product.link_to_buy ? `
-                                        <a href="${product.link_to_buy}" target="_blank" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-cart-plus me-1"></i>خرید
+                                        <a href="${product.link_to_buy}" target="_blank" class="btn-luxury" style="padding: 8px 20px; font-size: 0.9rem;">
+                                            <i class="fas fa-shopping-bag me-1"></i>Buy
                                         </a>
                                     ` : ''}
+                                    <button class="btn-view">
+                                        <i class="fas fa-eye me-1"></i>View
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -327,8 +419,24 @@
             `).join('');
         }
 
-        // شروع وقتی صفحه لود شد
-        document.addEventListener('DOMContentLoaded', loadProducts);
+        // Show error message
+        function showError() {
+            const containers = ['categoriesContainer', 'productsContainer', 'featuredSlider'];
+            containers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-exclamation-triangle fa-3x gold-text mb-3"></i>
+                            <p class="text-light">Unable to load content</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
 </html>

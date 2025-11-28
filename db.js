@@ -1,66 +1,135 @@
-const sqlite3 = require('sqlite3').verbose();
+// db.js - نسخه JSON (بدون نیاز به دیتابیس)
+const fs = require('fs');
 const path = require('path');
 
-// مسیر دیتابیس - در Render از /tmp استفاده می‌کنیم
-const dbPath = process.env.NODE_ENV === 'production' 
-  ? '/tmp/shop.db'
-  : path.join(__dirname, 'shop.db');
+const dbPath = path.join(__dirname, 'products.json');
 
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error('❌ Error opening database:', err.message);
-  } else {
-    console.log('✅ Connected to SQLite database');
-    initDatabase();
-  }
-});
-
-// ایجاد جدول products
-function initDatabase() {
-  db.run(`CREATE TABLE IF NOT EXISTS products (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    description TEXT,
-    price INTEGER,
-    image_url TEXT,
-    link_to_buy TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`, (err) => {
-    if (err) {
-      console.error('❌ Error creating table:', err);
-    } else {
-      console.log('✅ Products table ready');
-    }
-  });
+// ایجاد فایل اگر وجود ندارد
+if (!fs.existsSync(dbPath)) {
+  fs.writeFileSync(dbPath, '[]');
+  console.log('✅ Created products.json file');
 }
 
-// تابع برای اجرای query (شبیه mysql2)
-db.query = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    if (sql.trim().toUpperCase().startsWith('SELECT')) {
-      db.all(sql, params, (err, rows) => {
-        if (err) reject(err);
-        else resolve([rows]);
-      });
-    } else {
-      db.run(sql, params, function(err) {
-        if (err) reject(err);
-        else resolve([{ insertId: this.lastID, affectedRows: this.changes }]);
-      });
-    }
-  });
-};
-
-// Test database connection
-async function testConnection() {
+// خواندن محصولات از فایل JSON
+function getProducts() {
   try {
-    const [rows] = await db.query('SELECT 1 + 1 AS result');
-    console.log('✅ Connected to SQLite database successfully');
+    const data = fs.readFileSync(dbPath, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Error reading products:', err);
+    return [];
+  }
+}
+
+// ذخیره محصولات در فایل JSON
+function saveProducts(products) {
+  try {
+    fs.writeFileSync(dbPath, JSON.stringify(products, null, 2));
     return true;
-  } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+  } catch (err) {
+    console.error('Error saving products:', err);
     return false;
   }
+}
+
+// شبیه‌سازی MySQL interface برای سازگاری
+const db = {
+  query: async (sql, params = []) => {
+    console.log('📦 Executing:', sql);
+    
+    if (sql.includes('SELECT')) {
+      let products = getProducts();
+      
+      // ORDER BY id DESC
+      if (sql.includes('ORDER BY id DESC')) {
+        products = products.sort((a, b) => b.id - a.id);
+      }
+      
+      // WHERE id = ?
+      if (sql.includes('WHERE id = ?')) {
+        const id = parseInt(params[0]);
+        products = products.filter(p => p.id === id);
+      }
+      
+      return [products];
+    }
+    
+    // INSERT INTO
+    if (sql.includes('INSERT INTO')) {
+      const products = getProducts();
+      const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+      
+      const newProduct = {
+        id: newId,
+        title: params[0] || '',
+        description: params[1] || '',
+        price: parseInt(params[2]) || 0,
+        image_url: params[3] || '',
+        link_to_buy: params[4] || '',
+        created_at: new Date().toISOString()
+      };
+      
+      products.push(newProduct);
+      const success = saveProducts(products);
+      
+      if (success) {
+        console.log('✅ Product added with ID:', newId);
+        return [{ insertId: newId, affectedRows: 1 }];
+      } else {
+        throw new Error('Failed to save product');
+      }
+    }
+    
+    // DELETE FROM
+    if (sql.includes('DELETE FROM')) {
+      const products = getProducts();
+      const id = parseInt(params[0]);
+      const initialLength = products.length;
+      
+      const filteredProducts = products.filter(p => p.id !== id);
+      const success = saveProducts(filteredProducts);
+      
+      if (success) {
+        const affectedRows = initialLength - filteredProducts.length;
+        console.log('✅ Product deleted, affected rows:', affectedRows);
+        return [{ affectedRows }];
+      } else {
+        throw new Error('Failed to delete product');
+      }
+    }
+    
+    // UPDATE
+    if (sql.includes('UPDATE')) {
+      const products = getProducts();
+      const id = parseInt(params[5]); // آخرین پارامتر
+      
+      const productIndex = products.findIndex(p => p.id === id);
+      if (productIndex !== -1) {
+        products[productIndex] = {
+          ...products[productIndex],
+          title: params[0] || products[productIndex].title,
+          description: params[1] || products[productIndex].description,
+          price: parseInt(params[2]) || products[productIndex].price,
+          image_url: params[3] || products[productIndex].image_url,
+          link_to_buy: params[4] || products[productIndex].link_to_buy
+        };
+        
+        const success = saveProducts(products);
+        if (success) {
+          return [{ affectedRows: 1 }];
+        }
+      }
+      return [{ affectedRows: 0 }];
+    }
+    
+    return [{ affectedRows: 0 }];
+  }
+};
+
+// تست اتصال
+async function testConnection() {
+  console.log('✅ Connected to JSON database successfully');
+  return true;
 }
 
 module.exports = {

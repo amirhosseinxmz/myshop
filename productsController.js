@@ -1,4 +1,4 @@
-const { pool } = require('./db');  // '../db' رو به './db' تغییر بده
+const { pool } = require('./db');
 
 // Get all products
 exports.getProducts = async (req, res) => {
@@ -27,19 +27,19 @@ exports.getProductById = async (req, res) => {
   }
 };
 
-// Add new product
+// Add new product - FIXED (no price required)
 exports.addProduct = async (req, res) => {
   try {
-    const { title, description, price, image_url, link_to_buy } = req.body;
+    const { title, description, image_url, link_to_buy, category, position } = req.body;
 
-    // Validate required fields
-    if (!title || !price) {
-      return res.status(400).json({ error: "Title and price are required" });
+    // Validate required fields - فقط title لازمه
+    if (!title) {
+      return res.status(400).json({ error: "Title is required" });
     }
 
     const [result] = await pool.query(
-      "INSERT INTO products (title, description, price, image_url, link_to_buy) VALUES (?, ?, ?, ?, ?)",
-      [title, description, parseInt(price), image_url, link_to_buy]
+      "INSERT INTO products (title, description, image_url, link_to_buy, category, position) VALUES (?, ?, ?, ?, ?, ?)",
+      [title, description || '', image_url || '', link_to_buy || '', category || 'Other', position || 'regular']
     );
 
     res.json({ 
@@ -72,12 +72,12 @@ exports.deleteProduct = async (req, res) => {
 // Update product
 exports.updateProduct = async (req, res) => {
   try {
-    const { title, description, price, image_url, link_to_buy } = req.body;
+    const { title, description, image_url, link_to_buy, category, position } = req.body;
     const productId = req.params.id;
 
     const [result] = await pool.query(
-      "UPDATE products SET title = ?, description = ?, price = ?, image_url = ?, link_to_buy = ? WHERE id = ?",
-      [title, description, parseInt(price), image_url, link_to_buy, productId]
+      "UPDATE products SET title = ?, description = ?, image_url = ?, link_to_buy = ?, category = ?, position = ? WHERE id = ?",
+      [title, description || '', image_url || '', link_to_buy || '', category || 'Other', position || 'regular', productId]
     );
 
     if (result.affectedRows === 0) {

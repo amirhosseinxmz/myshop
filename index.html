@@ -1,40 +1,162 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Shop - Modern Store</title>
-    <!-- Bootstrap CSS -->
+    <title>فروشگاه اینترنتی - فروشگاه من</title>
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .slider-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+        }
+        
+        .product-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .category-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .category-box:hover {
+            border-color: #3498db;
+            transform: translateY(-3px);
+        }
+        
+        .slider-item {
+            display: none;
+            animation: fadeIn 1s;
+        }
+        
+        .slider-item.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
     <!-- نوار بالایی -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">
-                <i class="fas fa-store me-2"></i>My Modern Shop
+                <i class="fas fa-store me-2"></i>فروشگاه اینترنتی
             </a>
-            <a href="/admin" class="btn btn-outline-light">
-                <i class="fas fa-cog me-1"></i> Admin Panel
-            </a>
+            
+            <div class="navbar-nav ms-auto">
+                <a href="/admin" class="btn btn-outline-light">
+                    <i class="fas fa-cog me-1"></i> پنل مدیریت
+                </a>
+            </div>
         </div>
     </nav>
 
-    <!-- بخش هیرو -->
-    <section class="hero-section bg-light py-5">
-        <div class="container text-center">
-            <h1 class="display-4 fw-bold text-primary mb-3">Welcome to Our Store</h1>
-            <p class="lead text-muted">Discover amazing products at great prices</p>
+    <!-- اسلایدر محصولات ویژه -->
+    <section class="slider-section">
+        <div class="container">
+            <h2 class="text-center mb-4">محصولات ویژه</h2>
+            <div id="featuredSlider" class="position-relative">
+                <!-- اسلایدر اینجا پر میشود -->
+            </div>
         </div>
     </section>
 
-    <!-- محصولات -->
+    <!-- دسته‌بندی‌ها -->
+    <section class="categories-section py-5">
+        <div class="container">
+            <h3 class="text-center mb-4">دسته‌بندی محصولات</h3>
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="category-box">
+                        <i class="fas fa-mobile-alt fa-2x text-primary mb-2"></i>
+                        <h6>موبایل</h6>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="category-box">
+                        <i class="fas fa-laptop fa-2x text-success mb-2"></i>
+                        <h6>لپ‌تاپ</h6>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="category-box">
+                        <i class="fas fa-tshirt fa-2x text-warning mb-2"></i>
+                        <h6>پوشاک</h6>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="category-box">
+                        <i class="fas fa-home fa-2x text-info mb-2"></i>
+                        <h6>خانه و آشپزخانه</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- تمام محصولات -->
     <section class="products-section py-5">
         <div class="container">
-            <h2 class="text-center mb-5">Featured Products</h2>
+            <h3 class="text-center mb-5">همه محصولات</h3>
             <div id="products" class="row g-4">
                 <!-- محصولات اینجا نمایش داده می‌شوند -->
             </div>
@@ -42,9 +164,29 @@
     </section>
 
     <!-- فوتر -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container text-center">
-            <p>&copy; 2024 My Modern Shop. All rights reserved.</p>
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>فروشگاه اینترنتی</h5>
+                    <p>بهترین محصولات با بهترین قیمت‌ها</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>خدمات مشتریان</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">پرسش‌های متداول</a></li>
+                        <li><a href="#" class="text-light">رویه بازگرداندن کالا</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>تماس با ما</h5>
+                    <p><i class="fas fa-phone me-2"></i> ۰۲۱-۱۲۳۴۵۶۷۸</p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; ۲۰۲۴ فروشگاه اینترنتی. تمام حقوق محفوظ است.</p>
+            </div>
         </div>
     </footer>
 
@@ -53,29 +195,110 @@
     
     <script>
         const API_BASE_URL = '/api';
+        let currentSlide = 0;
+        let featuredProducts = [];
 
+        // بارگذاری محصولات
         async function loadProducts() {
             try {
                 const response = await fetch(`${API_BASE_URL}/products`);
                 const products = await response.json();
 
-                const productsContainer = document.getElementById('products');
+                // ذخیره محصولات برای اسلایدر
+                featuredProducts = products.slice(0, 5); // 5 محصول اول برای اسلایدر
                 
-                if (products.length === 0) {
-                    productsContainer.innerHTML = `
-                        <div class="col-12 text-center">
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                No products added yet.
-                            </div>
+                // نمایش اسلایدر
+                renderSlider();
+                
+                // نمایش تمام محصولات
+                renderAllProducts(products);
+                
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('products').innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            خطا در بارگذاری محصولات
                         </div>
-                    `;
-                    return;
-                }
+                    </div>
+                `;
+            }
+        }
 
-                productsContainer.innerHTML = products.map(product => `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 product-card shadow-sm">
+        // نمایش اسلایدر
+        function renderSlider() {
+            const slider = document.getElementById('featuredSlider');
+            
+            if (featuredProducts.length === 0) {
+                slider.innerHTML = `
+                    <div class="text-center">
+                        <p>هنوز محصولی اضافه نشده است</p>
+                    </div>
+                `;
+                return;
+            }
+
+            slider.innerHTML = featuredProducts.map((product, index) => `
+                <div class="slider-item ${index === 0 ? 'active' : ''}">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            ${product.image_url ? `
+                                <img src="${product.image_url}" class="img-fluid rounded" alt="${product.title}" style="max-height: 300px;">
+                            ` : `
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                                    <i class="fas fa-image fa-5x text-muted"></i>
+                                </div>
+                            `}
+                        </div>
+                        <div class="col-md-6">
+                            <h3>${product.title}</h3>
+                            <p class="lead">${product.description || 'توضیحات موجود نیست'}</p>
+                            <div class="price h4">${product.price ? product.price.toLocaleString() + ' تومان' : 'قیمت نامشخص'}</div>
+                            ${product.link_to_buy ? `
+                                <a href="${product.link_to_buy}" target="_blank" class="btn btn-success btn-lg mt-3">
+                                    <i class="fas fa-shopping-cart me-2"></i>خرید محصول
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // شروع اسلایدر
+            startSlider();
+        }
+
+        // اسلایدر خودکار
+        function startSlider() {
+            setInterval(() => {
+                const slides = document.querySelectorAll('.slider-item');
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 5000); // تغییر هر 5 ثانیه
+        }
+
+        // نمایش تمام محصولات
+        function renderAllProducts(products) {
+            const container = document.getElementById('products');
+            
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            هنوز محصولی اضافه نشده است
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = products.map(product => `
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="card product-card h-100">
+                        <div class="position-relative">
                             ${product.image_url ? `
                                 <img src="${product.image_url}" class="card-img-top product-image" alt="${product.title}">
                             ` : `
@@ -83,36 +306,28 @@
                                     <i class="fas fa-image fa-3x"></i>
                                 </div>
                             `}
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${product.title}</h5>
-                                <p class="card-text text-muted flex-grow-1">${product.description || 'No description available'}</p>
-                                <div class="mt-auto">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="h5 text-primary mb-0">${product.price ? product.price.toLocaleString() + ' Toman' : 'Free'}</span>
-                                        ${product.link_to_buy ? `
-                                            <a href="${product.link_to_buy}" target="_blank" class="btn btn-success">
-                                                <i class="fas fa-shopping-cart me-1"></i> Buy Now
-                                            </a>
-                                        ` : ''}
-                                    </div>
+                            <div class="discount-badge">ویژه</div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${product.title}</h5>
+                            <p class="card-text text-muted flex-grow-1">${product.description || 'بدون توضیحات'}</p>
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="price">${product.price ? product.price.toLocaleString() + ' تومان' : 'رایگان'}</span>
+                                    ${product.link_to_buy ? `
+                                        <a href="${product.link_to_buy}" target="_blank" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-cart-plus me-1"></i>خرید
+                                        </a>
+                                    ` : ''}
                                 </div>
                             </div>
                         </div>
                     </div>
-                `).join('');
-            } catch (error) {
-                console.error('Error loading products:', error);
-                document.getElementById('products').innerHTML = `
-                    <div class="col-12">
-                        <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            Error loading products. Please try again.
-                        </div>
-                    </div>
-                `;
-            }
+                </div>
+            `).join('');
         }
 
+        // شروع وقتی صفحه لود شد
         document.addEventListener('DOMContentLoaded', loadProducts);
     </script>
 </body>

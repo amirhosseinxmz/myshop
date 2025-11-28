@@ -1,4 +1,4 @@
-const { pool } = require('../db');
+const { pool } = require('./db');  // '../db' رو به './db' تغییر بده
 
 // Get all products
 exports.getProducts = async (req, res) => {

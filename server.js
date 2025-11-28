@@ -13,19 +13,21 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "../frontend")));
+
+// مسیر درست برای فایل‌های استاتیک
+app.use(express.static(path.join(__dirname, "frontend")));
 
 // routes
 app.use("/api/products", productsRoute);
 
 // main route - show home page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(__dirname, "frontend/index.html"));
 });
 
 // admin panel route
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/admin.html"));
+  res.sendFile(path.join(__dirname, "frontend/admin.html"));
 });
 
 // health check route
@@ -40,21 +42,7 @@ app.get("/health", async (req, res) => {
 });
 
 // start server
-async function startServer() {
-  // Test database connection
-  const dbConnected = await testConnection();
-  if (!dbConnected) {
-    console.log('❌ Cannot start server without database connection');
-    console.log('💡 Please make sure MySQL is running and database exists');
-    process.exit(1);
-  }
-
-  app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
-    console.log(`🛍️  Shop: http://localhost:${PORT}`);
-    console.log(`📊 Admin: http://localhost:${PORT}/admin`);
-    console.log(`❤️  Health: http://localhost:${PORT}/health`);
-  });
-}
-
-startServer().catch(console.error);
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`🛍️ Shop is ready!`);
+});
